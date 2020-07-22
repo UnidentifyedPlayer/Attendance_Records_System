@@ -12,11 +12,6 @@ if (isset($_SESSION['role']))
 else
     echo "<p>error occurred in assigning role<p>";
 ?>
-<div>
-    <p>
-        <a href="disconnect.php">Выйти из системы</a>
-    </p>
-</div>
 
 </body>
 </html>

@@ -40,6 +40,8 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
     }
 }
 ?>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -48,11 +50,11 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
 </head>
 <body>
 <h2> Вход </h2>
-<form method="POST">
+<form method="POST" action="login.php">
     <table>
         <tr>
             <th>Пользователь</th>
-            <td><input type="text" name="login" value="<?php/* echo $login; */?>"></td>
+            <td><input type="text" name="login" ></td>
         </tr>
         <tr>
             <th>Пароль</th>
