@@ -1,0 +1,21 @@
+div{
+    /*margin: 10px;*/
+    /*border: 1px solid black;*/
+    font-size: 16px;
+}
+#header{
+    background-color: #ccc;
+    height: 80px;
+}
+#sidebar{
+    background-color: #ddd;
+    float: left;
+    width: 150px;
+}
+#main{
+    background-color: #eee;
+    margin-left: 170px; /* 150px (ширина сайдбара) + 10px + 10px (2 отступа) */
+}
+#footer{
+    background-color: #ccc;
+}

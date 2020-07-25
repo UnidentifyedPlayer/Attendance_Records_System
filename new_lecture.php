@@ -5,7 +5,7 @@ require_once "lect_functions.php";
 $content = "";
 $courseid = $_GET['courseid'];
 $course_info = get_course_info($link, $_GET['courseid']);
-$students=get_course_stud_names($link, $_GET['courseid']);
+$students= get_course_stud_names($link, $_GET['courseid']);
 $content.="
 <form method='POST'>
 <input type='date' name='date'>
@@ -17,7 +17,7 @@ $content.="<div>".$student['name']." ".$student['surname']."
 <option value='был'>был</option>
 <option value='не был'>не был</option>
 </select>
-
+</div>
 ";
 }
 $content.="</form>";
@@ -25,15 +25,17 @@ $content.="</form>";
 if(isset($_POST['date']))
 {
     $date = $_POST['date'];
-    $query ="";
+    $query =" ";
     foreach($students as $student){
         $id = $student['id'];
         $status = $_POST["$id"];
-        $query .= "
+        echo "<div> $courseid , $id , '$date', '$status' </div>";
+        $query = "
         INSERT INTO attend_records 
-        VALUES (NULL,'$courseid','$id',STR_TO_DATE('$date','%Y-%m-%d'),'$status')";
+        VALUES (NULL,'$courseid','$id',STR_TO_DATE('$date','%Y-%m-%d'),'$status'); ";
+        $result = mysqli_query($link, $query);
     }
-    $result = mysqli_query($link, $query);
+    //$result = mysqli_query($link, $query);
     if($result) {
         header("Location: course_info.php?courseid=$courseid");
     }
@@ -88,12 +90,13 @@ if(isset($_POST['date']))
         echo "<p>'$error'</p>";
     }
     ?>
-    <ul>
         <?php
         echo $content;
         if (isset($error)) echo $error;
         ?>
-    </ul>
+</div>
+<div>
+    <?php echo"<a href='course_info.php?courseid=$courseid'>Назад к профилю курса</a>"?>
 </div>
 </body>
 </html>

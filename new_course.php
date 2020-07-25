@@ -3,87 +3,79 @@ require_once "restart_session.php";
 require_once "lect_functions.php";
 
 
-
-
-$idx = 0;
-$groups = get_groups($link);
 //if(isset($_POST['add_group'])){
 //    $chosen_groups[$idx] = $_POST['group'];
 //}
-
-$content = "";
-$content.="<select name='groups_for_choice'>";
-foreach ($groups as $group){
-    $groupid= $group['id'];
-    $groupnum = $group['groupnum'];
-    $coursenum = $group['course_year'];
-    $content.="<option value=$groupid>$groupnum г $coursenum курс</option>";
+if (isset($courseid)) {
+    if (isset($_GET['courseid'])) {
+        $courseid = $_GET['courseid'];
+    } else {
+        $error = "Вы не авторизированы";
+    }
 }
-$content.="</select>";
 
+if (isset($_POST['semester']) && isset($_POST['year']) && isset($_POST['course_name'])) {
+    $lectid = $_SESSION['roleid'];
+    $semester = $_POST['semester'];
+    $year = $_POST['year'];
+    $course_name = $_POST['course_name'];
+    $query = "INSERT INTO courses VALUES(NULL,'$lectid','$course_name','$year', '$semester')";
+    if (mysqli_query($link, $query)) {
+        header("Location: lect_prof.php");
+    } else {
+        $error = "Неудача при попытке добавить новый курс";
+    }
+}
 ?>
 
 
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="http://code.jquery.com/jquery-latest.js"></script>
-    <title> Запись на курс </title>
     <meta charset="utf-8">
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <title>Блочная верстка в HTML5</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<?php require_once "headers/links.php";
-?>
-<form name="myForm">
-<div>
-<div>
-    Группы
-    <?php
-    echo $content;
-    if(isset($error)) echo $error;
-    ?>
-    <p><input type="button" name="addButton" value="Добавить" /></p>
-</div>
-<div>
-    Выбранные группы
-    <select name="chosen_groups">
-    </select>
-    <p><input type="button" name="removeButton" value="Удалить" /></p>
-</div>
-</div>
-</form>
+<div id="header">Шапка сайта<?php require_once "headers/greetings.php" ?></div>
+<div id="sidebar">Сайдбар <?php require_once "headers/links.php" ?></div>
 
-<script>
-    var addButton = myForm.addButton,
-        removeButton = myForm.removeButton,
-        groupsToChoseSelect = myForm.groups_for_choice;
-        chosenGroupSelect = myForm.chosen_groups;
-    function addOption() {
-        var selectedIndex = groupsToChoseSelect.options.selectedIndex;
-        // получаем текст для элемента
-        var text = groupsToChoseSelect.options[selectedIndex].text;
-        // получаем значение для элемента
-        var value = groupsToChoseSelect.options[selectedIndex].value;
-        // создаем новый элемент
-        var newOption = new Option(text, value);
-        chosenGroupSelect.options.add(newOption);
-        // удаляем элемент
-        groupsToChoseSelect.options[selectedIndex].remove();
-    }
-    function removeOption() {
-        var selectedIndex = chosenGroupSelect.options.selectedIndex;
-        // получаем текст для элемента
-        var text = chosenGroupSelect.options[selectedIndex].text;
-        // получаем значение для элемента
-        var value = chosenGroupSelect.options[selectedIndex].value;
-        // создаем новый элемент
-        var newOption = new Option(text, value);
-        groupsToChoseSelect.options.add(newOption);
-        // удаляем элемент
-        chosenGroupSelect.options[selectedIndex].remove();
-    }
-    addButton.addEventListener("click", addOption);
-    removeButton.addEventListener("click", removeOption);
-</script>
+<div id="main">Основное содержимое
+    <?php
+    if (isset($error))
+        echo "
+    <div>
+        $error
+    </div>
+    " ?>
+    <form name="create_course" method="post">
+        <div>
+            <div>
+                Название курса
+                <p><input type='text' name="course_name"></p>
+            </div>
+            <div>
+                Год
+                <input type="number" name="year" min="2000" max="9999">
+            </div>
+            <div>
+                Семестр
+                <div>
+                    <select name="semester">
+                    <option value=1>1</option>
+                    <option value=2>2</option>
+                </select>
+                </div>
+            </div>
+            <div>
+                <p><input type="submit" name="Создать курс"</p>
+            </div>
+        </div>
+    </form>
+    <?php
+    echo "<p> id преподавателя" . $_SESSION['roleid'] . "</p>";
+    ?>
+</div>
 </body>
 </html>

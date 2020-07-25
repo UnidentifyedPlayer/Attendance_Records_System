@@ -4,29 +4,52 @@ require_once "lect_functions.php";
 
 $content = "";
 $error = "";
-$dates = get_course_dates($link, $_GET['courseid']);
-$students = get_course_stud_names($link, $_GET['courseid']);
-$attendance = get_course_attendance($link, $_GET['courseid']);
-$content .= "<table><tr><th>Студенты</th>";
-foreach ($dates as $date) {
-    $content .= " <th>" . $date[0] . "</th>";
-}
-
-foreach ($students as $student) {
-    $content .= "<tr><td>" . $student['name'] . " " . $student['middle_name'] . " " . $student['surname'] . "</td>";
-    $cur_studid = $student['id'];
-    $dateidx = 0;
-    foreach ($attendance as $record) {
-    if(($record['lecture_date']== $dates[$dateidx][0]) && ($student['id']== $record['studentid'])){
-        $content .= "<td>".$record['status']."</td>";
-        $dateidx++;
-        if($dateidx>= count($dates)){break;}
+$courseid = $_GET['courseid'];
+$dates = get_course_dates($link, $courseid);
+$students = get_course_stud_names($link, $courseid);
+$attendance = get_course_attendance($link, $courseid);
+if (empty($attendance)) {
+    if (empty($students)) {
+        $content .= "<div>В данный момент в этом курсе не числиться ни одного студента</div>
+<div>
+<a href='enroll_on_course.php?courseid=$courseid'>Добавить студентов</a>
+</div>";
     }
+    else{
+        $content .="<p><a href='new_lecture.php?courseid=" . $_GET['courseid'] . "'>Новая лекция</a></p>";
+    }
+//    else{
+//        $content .= "<div>Нет информации о посещамости лекций</div>
+//<div>
+//<a href='enroll_on_course.php'>Добавить информацию о новой лекции</a>
+//</div>";
+//    }
+}
+else {
+    $content .="<p><a href='new_lecture.php?courseid=" . $_GET['courseid'] . "'>Новая лекция</a></p>";
+    $content .= "<table><tr><th>Студенты</th>";
+    foreach ($dates as $date) {
+        $content .= " <th>" . $date[0] . "</th>";
     }
 
-    $content .= "</tr>";
+    foreach ($students as $student) {
+        $content .= "<tr><td>" . $student['name'] . " " . $student['middle_name'] . " " . $student['surname'] . "</td>";
+        $cur_studid = $student['id'];
+        $dateidx = 0;
+        foreach ($attendance as $record) {
+            if (($record['lecture_date'] == $dates[$dateidx][0]) && ($student['id'] == $record['studentid'])) {
+                $content .= "<td>" . $record['status'] . "</td>";
+                $dateidx++;
+                if ($dateidx >= count($dates)) {
+                    break;
+                }
+            }
+        }
+
+        $content .= "</tr>";
+    }
+    $content .= "</tr></table>";
 }
-$content .= "</tr></table>";
 ?>
 
 <!DOCTYPE html>
@@ -69,14 +92,9 @@ $content .= "</tr></table>";
 <div id="main">Основное содержимое
 
     <?php echo "<p> id преподавателя" . $_SESSION['roleid'] . "</p>";
-    echo "<p><a href='new_lecture.php?courseid=".$_GET['courseid']."'>Новая лекция</a></p>";
-    ?>
-    <ul>
-        <?php
         echo $content;
         if (isset($error)) echo $error;
         ?>
-    </ul>
 </div>
 </body>
 </html>
