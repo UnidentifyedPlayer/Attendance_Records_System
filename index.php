@@ -3,7 +3,7 @@ session_start();
 if (isset($_SESSION['role'])) {
     switch($_SESSION['role']){
     case 'student': $redirect_url = 'stud_prof.php'; break;
-    default :$redirect_url = 'main.php';
+    default :$redirect_url = 'lect_prof.php';
     }
 } else {
     $redirect_url = 'login.php';

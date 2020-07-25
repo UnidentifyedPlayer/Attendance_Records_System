@@ -21,7 +21,7 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
                 $_SESSION['role'] = $row['role'];
                 switch ($row['role']){
                     case 'student': $tabletosearch = 'students'; break;
-                    case 'lecturer': $tabletosearch = 'lectueres'; break;
+                    case 'lecturer': $tabletosearch = 'lecturers'; break;
                 }
                 $query = "SELECT * FROM $tabletosearch WHERE userid='$userid'";
                 $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));

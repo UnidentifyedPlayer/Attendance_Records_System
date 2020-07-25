@@ -1,3 +1,8 @@
+<?php
+require_once "restart_session.php";
+require_once "stud_functions.php";
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,9 +10,7 @@
     <meta charset="utf-8">
 </head>
 <body>
-<?php require_once "links.php";
-    require_once "restart_session.php";
-    require_once "stud_functions.php";
+<?php require_once "headers/links.php";
 ?>
 <ul>
     <?php
