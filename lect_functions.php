@@ -63,4 +63,11 @@ function get_groups($link){
     return $groups;
 }
 
+function get_lect_info($link, $course_id, $lect_date){
+    $query = "SELECT * FROM attend_records WHERE courseid = '$course_id' AND lecture_date = '$lect_date'";
+    $result = mysqli_query($link, $query);
+    $attend_records = $result->fetch_all(MYSQLI_ASSOC);
+    return $attend_records;
+}
+
 ?>

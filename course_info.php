@@ -16,7 +16,7 @@ if (empty($attendance)) {
 </div>";
     }
     else{
-        $content .="<p><a href='new_lecture.php?courseid=" . $_GET['courseid'] . "'>Новая лекция</a></p>";
+        $content .="<p><a href='new_lecture.php?courseid=" . $courseid . "'>Новая лекция</a></p>";
     }
 //    else{
 //        $content .= "<div>Нет информации о посещамости лекций</div>
@@ -26,10 +26,10 @@ if (empty($attendance)) {
 //    }
 }
 else {
-    $content .="<p><a href='new_lecture.php?courseid=" . $_GET['courseid'] . "'>Новая лекция</a></p>";
+    $content .="<p><a href='new_lecture.php?courseid=" . $courseid . "'>Новая лекция</a></p>";
     $content .= "<table><tr><th>Студенты</th>";
     foreach ($dates as $date) {
-        $content .= " <th>" . $date[0] . "</th>";
+        $content .= " <th><p><a href='edit_lecture.php?courseid=$courseid&lect_date=$date[0]'> " . $date[0] . "</a></th>";
     }
 
     foreach ($students as $student) {
